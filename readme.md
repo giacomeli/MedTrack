@@ -25,7 +25,7 @@ MedTrack é uma aplicação open-source de controle de estoque e movimentações
 1. Clone o repositório:
 
     ```bash
-    git clone https://github.com/
+    git clone https://github.com/giacomeli/MedTrack.git
     cd medtrack
     ```
 

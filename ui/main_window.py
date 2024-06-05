@@ -65,59 +65,76 @@ class MainWindow(QMainWindow):
         item_names = database.fetch_item_names()
         completer_model = QtCore.QStringListModel(item_names, self.completer)
         self.completer.setModel(completer_model)
-        
+
         # Update the table based on the search text
         data = database.search_items(search_text)
         self.populate_table(data)
 
     def populate_table(self, data):
         self.stockTable.setRowCount(0)
-        self.stockTable.setColumnCount(4)  # Adjust to 4 columns
-        self.stockTable.setHorizontalHeaderLabels(['Item Name', 'Quantity', 'Created At', 'Updated At'])  # Set column headers
+        self.stockTable.setColumnCount(5)  # Adjust to 5 columns
+        self.stockTable.setHorizontalHeaderLabels(['Id', 'Item Name', 'Quantity', 'Created At', 'Updated At'])  # Set column headers
         for row_number, row_data in enumerate(data):
             self.stockTable.insertRow(row_number)
-            for column_number, cell_data in enumerate(row_data[1:]):  # Skip the first column (ID)
+            for column_number, cell_data in enumerate(row_data):  # Do not skip the first column (ID)
                 self.stockTable.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(cell_data)))
-        
+
         # Set column widths
-        self.stockTable.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        self.stockTable.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        self.stockTable.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        self.stockTable.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.stockTable.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
         self.stockTable.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
+        self.stockTable.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.ResizeToContents)
 
     def set_font_size(self):
-        font = QtGui.QFont()  # Certifique-se de que QtGui foi importado
+        font = QtGui.QFont()
         font.setPointSize(14)
         self.searchInput.setFont(font)
+        self.searchInput.setMinimumHeight(40)
         self.addButton.setFont(font)
+        self.reportButton.setFont(font)
 
     def eventFilter(self, source, event):
-        if source is self.searchInput:
-            if event.type() == QtCore.QEvent.KeyPress:
-                if event.key() == QtCore.Qt.Key_Up:
-                    current_row = self.stockTable.currentRow()
-                    if current_row > 0:
-                        self.stockTable.selectRow(current_row - 1)
-                elif event.key() == QtCore.Qt.Key_Down:
-                    current_row = self.stockTable.currentRow()
-                    if current_row < self.stockTable.rowCount() - 1:
-                        self.stockTable.selectRow(current_row + 1)
-                elif event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
-                    selected_row = self.stockTable.currentRow()
-                    if selected_row >= 0:
-                        item_name = self.stockTable.item(selected_row, 0).text()
-                        item_quantity = int(self.stockTable.item(selected_row, 1).text())
-                        self.open_withdraw_item_dialog(item_name, item_quantity)
-                elif event.key() == QtCore.Qt.Key_Delete:
-                    selected_row = self.stockTable.currentRow()
-                    if selected_row >= 0:
-                        item_id = self.stockTable.item(selected_row, 0).text()
-                        item_name = self.stockTable.item(selected_row, 0).text()
-                        if item_id and item_name:
-                            reply = QMessageBox.question(self, 'Confirmação', f'Tem certeza que deseja remover o item "{item_name}"?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-                            if reply == QMessageBox.Yes:
-                                database.delete_item(item_id)
-                                self.load_data()
-                                self.update_completer()
-                                QMessageBox.information(self, 'Sucesso', 'Item removido do estoque')
+        if source is self.searchInput and event.type() == QtCore.QEvent.KeyPress:
+            key_actions = {
+                QtCore.Qt.Key_Up: self.navigate_up,
+                QtCore.Qt.Key_Down: self.navigate_down,
+                QtCore.Qt.Key_Return: self.select_item,
+                QtCore.Qt.Key_Enter: self.select_item,
+                QtCore.Qt.Key_Delete: self.delete_item,
+            }
+            action = key_actions.get(event.key())
+            if action:
+                action()
+                return True
         return super().eventFilter(source, event)
+
+    def navigate_up(self):
+        current_row = self.stockTable.currentRow()
+        if current_row > 0:
+            self.stockTable.selectRow(current_row - 1)
+
+    def navigate_down(self):
+        current_row = self.stockTable.currentRow()
+        if current_row < self.stockTable.rowCount() - 1:
+            self.stockTable.selectRow(current_row + 1)
+
+    def select_item(self):
+        selected_row = self.stockTable.currentRow()
+        if selected_row >= 0:
+            item_name = self.stockTable.item(selected_row, 1).text()
+            item_quantity = int(self.stockTable.item(selected_row, 2).text())
+            self.open_withdraw_item_dialog(item_name, item_quantity)
+
+    def delete_item(self):
+        selected_row = self.stockTable.currentRow()
+        if selected_row >= 0:
+            item_id = self.stockTable.item(selected_row, 0).text()
+            item_name = self.stockTable.item(selected_row, 1).text()
+            if item_id and item_name:
+                reply = QMessageBox.question(self, 'Confirmação', f'Tem certeza que deseja remover o item "{item_name}"?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    database.delete_item(int(item_id))
+                    self.load_data()
+                    self.update_completer()
+                    QMessageBox.information(self, 'Sucesso', 'Item removido do estoque')

@@ -11,16 +11,35 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Stock Control</string>
+   <string>Controle de Estoque</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLineEdit" name="searchInput">
-      <property name="placeholderText">
-       <string>Search...</string>
-      </property>
-     </widget>
+     <layout class="QVBoxLayout" name="searchInputLayout">
+      <item>
+       <widget class="QLabel" name="searchInputLabel">
+        <property name="text">
+         <string>Pesquisar por medicamento</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="searchInput">
+        <property name="placeholderText">
+         <string>Buscar...</string>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="minimumHeight">
+         <number>40</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QTableWidget" name="stockTable"/>
@@ -30,14 +49,14 @@
       <item>
        <widget class="QPushButton" name="addButton">
         <property name="text">
-         <string>Add Item</string>
+         <string>Adicionar Item</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="reportButton">
         <property name="text">
-         <string>Generate Report</string>
+         <string>Gerar Relatório</string>
         </property>
        </widget>
       </item>

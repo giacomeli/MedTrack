@@ -43,7 +43,7 @@ class ReportDialog(QDialog):
         self.open_pdf(file_name)
 
     def create_pdf_report(self, data, start_date, end_date):
-        file_name = f'report_{start_date}_{end_date}.pdf'
+        file_name = f'reports/report_{start_date}_{end_date}.pdf'
         doc = SimpleDocTemplate(file_name, pagesize=letter)
         elements = []
 

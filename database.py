@@ -84,3 +84,21 @@ def log_withdrawal(name, quantity, observation, date_time):
             VALUES (?, ?, ?, ?)
         ''', (name, quantity, observation, date_time))
         conn.commit()
+
+def fetch_withdrawals_by_date_range(start_date, end_date):
+    with connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT name, SUM(quantity)
+            FROM withdrawals
+            WHERE date(substr(date_time, 7, 4) || '-' || substr(date_time, 4, 2) || '-' || substr(date_time, 1, 2)) BETWEEN date(?) AND date(?)
+            GROUP BY name
+        ''', (start_date, end_date))
+        return cursor.fetchall()
+
+def fetch_item_quantity(name):
+    with connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT quantity FROM inventory WHERE name = ?', (name,))
+        result = cursor.fetchone()
+        return result[0] if result else 0

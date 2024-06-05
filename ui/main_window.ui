@@ -18,40 +18,30 @@
     <item>
      <widget class="QLineEdit" name="searchInput">
       <property name="placeholderText">
-       <string>Search Item</string>
+       <string>Search...</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="addButton">
-      <property name="text">
-       <string>Add Item</string>
-      </property>
-     </widget>
+     <widget class="QTableWidget" name="stockTable"/>
     </item>
     <item>
-     <widget class="QTableWidget" name="stockTable">
-      <column>
-       <property name="text">
-        <string>Item Name</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Quantity</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Created At</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Updated At</string>
-       </property>
-      </column>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="addButton">
+        <property name="text">
+         <string>Add Item</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="reportButton">
+        <property name="text">
+         <string>Generate Report</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

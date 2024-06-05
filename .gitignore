@@ -1,0 +1,84 @@
+# Python
+*.py[cod]
+*.py[cod].cover
+__pycache__/
+*.so
+*.pyd
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+.env/
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Distribution / Packaging
+.Python
+develop-eggs/
+*.egg-info/
+dist/
+eggs/
+parts/
+sdist/
+var/
+wheels/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+*.bak
+*.swp
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Backup files
+*.bak
+*.swp
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.db
+*.db-journal
+
+# Other files
+*.csv
+*.dat
+*.pkl
+
+# Ignore data and UI files (if you want to exclude them)
+# Uncomment the following lines if you do not want to track these files in Git
+# ui/
+# assets/
